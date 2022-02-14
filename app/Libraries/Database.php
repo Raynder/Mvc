@@ -13,7 +13,7 @@
 
             $valor = $mes - 1;
              
-            $db = 'lobegestao'; 
+            $db = 'budogs'; 
             $host = "localhost";
             $user = "root";
             $pass = "";
@@ -87,7 +87,12 @@
 
         public function multi_query($query){
             $sql = $this->conn->prepare($query);
-            $sql->execute();
+            if($sql->execute()){
+                return true;
+            }
+            else{
+                return false;
+            }
         }
 
         function str_lreplace($search, $replace, $subject)

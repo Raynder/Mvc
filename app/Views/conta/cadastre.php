@@ -63,11 +63,6 @@ e[s]=e[s]||[],e.zaraz._preTrack=[],e.zaraz.track=(t,r)=>e.zaraz._preTrack.push([
 <span class="focus-input100" data-placeholder="Email"></span>
 </div>
 
-<div class="wrap-input100 validate-input" data-validate="CNPJ invalido">
-<input class="input100" type="text" name="cnpj">
-<span class="focus-input100" data-placeholder="CNPJ"></span>
-</div>
-
 <div class="wrap-input100 validate-input" data-validate="Defina uma senha">
 <span class="btn-show-pass">
 <i class="zmdi zmdi-eye"></i>

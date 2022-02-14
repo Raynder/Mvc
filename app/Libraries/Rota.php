@@ -2,7 +2,7 @@
 
 class Rota {
     
-    private $controlador = 'Sistema'; // Controlador padrão
+    private $controlador = 'Cardapio'; // Controlador padrão
     private $metodo = 'index'; // Método padrão
     private $parametros = array(); // Parâmetros padrão
 

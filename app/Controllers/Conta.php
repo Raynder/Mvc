@@ -32,8 +32,7 @@ class Conta extends Controller
                 'nome' => $_POST['nome'],
                 'email' => $_POST['email'],
                 'senha' => $_POST['senha'],
-                'confirmarSenha' => $_POST['confirmarSenha'],
-                'cnpj' => $_POST['cnpj']
+                'confirmarSenha' => $_POST['confirmarSenha']
             ];
 
             $user = new Usuario();

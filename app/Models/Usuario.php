@@ -6,7 +6,6 @@
         private $id;
         private $nome;
         private $email;
-        private $cnpj;
 
 
         public function __construct(){ // 
@@ -18,7 +17,7 @@
         public function cadastrar($dados){
             if($dados['senha'] == $dados['confirmarSenha']){
                 // Verificar se o email ou o cnpj já está cadastrado
-                $query = "SELECT * FROM usuarios WHERE cnpj = :cnpj OR email = :email";
+                $query = "SELECT * FROM usuarios WHERE email = :email";
                 $array = array(
                     ':email' => $dados['email'],
                     ':cnpj' => $dados['cnpj']
@@ -29,14 +28,11 @@
                 }
                 else{
                     // Inserir usuario no banco de dados
-                    $query = ("INSERT INTO usuarios (nome, email, senha, cnpj, status) VALUES (:nome, :email, :senha, :cnpj, :status)");
+                    $query = ("INSERT INTO usuarios (nome, email, senha) VALUES (:nome, :email, :senha)");
                     $array = array(
                         ':nome' => $dados['nome'],
                         ':email' => $dados['email'],
-                        ':senha' => md5($dados['senha']),
-                        ':cnpj' => $dados['cnpj'],
-                        ':status' => 1
-                    );
+                        ':senha' => md5($dados['senha'])                    );
                     $resul = $this->sql->insere($query, $array);
                     if($resul){ // Se inseriu com sucesso
                         return ['status' => 'sucesso', 'msg' => 'Usuário cadastrado com sucesso!'];
@@ -61,7 +57,6 @@
                 $_SESSION['usuario']['id'] = $resul[0]['id'];
                 $_SESSION['usuario']['nome'] = $resul[0]['nome'];
                 $_SESSION['usuario']['email'] = $resul[0]['email'];
-                $_SESSION['usuario']['cnpj'] = $resul[0]['cnpj'];
                 
                 return ['status' => 'sucesso', 'msg' => 'Usuário logado com sucesso!'];
             }
