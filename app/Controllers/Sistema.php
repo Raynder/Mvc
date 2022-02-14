@@ -2,7 +2,7 @@
 
     class Sistema extends Controller {
 
-        public function index($nomeSistema = '') {
+        public function index($nomeSistema = "") {
             if(isset($_SESSION['usuario'])) {
                 $dados = array(
                     'nomeSistema' => $nomeSistema
