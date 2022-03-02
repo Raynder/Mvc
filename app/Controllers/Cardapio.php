@@ -3,34 +3,21 @@
     class Cardapio extends Controller {
 
         public function index($nomeCardapio = '') {
-            $model = new Combos();
-            $produtos = $model->listar();
+            $model = new Produtos();
+            $grupo = new Grupos();
+
+            $dados = array(
+                'grupos' => $grupo->listar(),
+                'produtos' => $model->listar()
+            );
             
-            $this->view('Cardapio/index', $produtos);            
+            $this->view('Cardapio/index2', $dados);            
         }
 
-        public function combos(){
-
-            $model = new Combos();
-            $produtos = $model->listar();
-            
-            $this->view('Cardapio/index', $produtos);
-        }
-
-        public function combinados(){
-
-            $model = new Combinados();
-            $produtos = $model->listar();
-            
-            $this->view('Cardapio/index', $produtos);
-        }
-
-        public function gourmet(){
-
-            $model = new Gourmet();
-            $produtos = $model->listar();
-            
-            $this->view('Cardapio/index', $produtos);
+        public function buscarProduto() {
+            $model = new Produtos();
+            $produto = $model->buscar($_POST['id']);
+            echo json_encode($produto);
         }
 
     }

@@ -1,6 +1,6 @@
 <?php
 
-class Combos
+class Produtos
 {
 
     private $sql;
@@ -13,7 +13,7 @@ class Combos
         $this->sql = new Database();
     }
 
-    public function cadastrar($dados)
+    public function cadastrar($dados, $tipo)
     {
         if (isset($dados['img'])) {
             $data = $dados['img'];
@@ -30,16 +30,23 @@ class Combos
 
             $data = base64_decode($image_array_2[1]);
 
-            $image_name = 'dist/img/combos/'.time() . '.png';
-
+            $image_name = 'dist/img/'.$tipo.'/'.time() . '.png';
+            if(is_dir('dist/img/'.$tipo.'/')){
+            }
+            else{
+                mkdir('dist/img/'.$tipo.'/', 0777, true);
+            }
             file_put_contents($image_name, $data);
 
-            $resul = $this->sql->insere("INSERT INTO combos (nome, valor, status, ingredientes, img) VALUES (:nome, :valor, :status, :ingredientes, :img)", array(
+            $resul = $this->sql->insere("INSERT INTO `produtos`( `nome`, `ingredientes`, `status`, `img`, `tipo`, `valor`,`bebida`, `batata`) VALUES (:nome, :ingredientes, :status, :img, :tipo, :valor, :bebida, :batata)", array(
                 ':nome' => $dados['nome'],
                 ':valor' => $dados['valor'],
                 ':status' => $dados['status'],
                 ':ingredientes' => $dados['ingredientes'],
-                ':img' => $image_name
+                ':img' => $image_name,
+                ':tipo' => strtolower($tipo),
+                ':bebida' => $dados['bebida'],
+                ':batata' => $dados['batata']
             ));
     
             if ($resul) {
@@ -50,16 +57,21 @@ class Combos
         }
     }
 
-    public function listar()
+    public function listar($tipo = '')
     {
-        $query = "SELECT * FROM combos";
+        if($tipo == ''){
+            $query = "SELECT * FROM produtos";
+        }
+        else{
+            $query = "SELECT * FROM produtos WHERE tipo = '$tipo'";
+        }
         $resul = $this->sql->select($query);
         return $resul;
     }
 
     public function excluir($id, $img)
     {
-        $resul = $this->sql->insere("DELETE FROM combos WHERE id = :id", array(
+        $resul = $this->sql->insere("DELETE FROM produtos WHERE id = :id", array(
             ':id' => $id
         ));
 
@@ -70,5 +82,13 @@ class Combos
         } else {
             echo "Erro ao excluir!";
         }
+    }
+
+    public function buscar($id)
+    {
+        $resul = $this->sql->select("SELECT * FROM produtos WHERE id = :id", array(
+            ':id' => $id
+        ));
+        return $resul;
     }
 }

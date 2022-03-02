@@ -150,6 +150,7 @@ a:hover{
 
 .produto-imagem img {
     width: 100%;
+    padding: 15%;
 }
 
 .produto-detalhes {
@@ -215,6 +216,13 @@ h1 {
     .item {
         height: 100%;
         margin: 50px;
+    }
+    .barra.topo h1{
+        font-size: 12pt;
+    }
+    .item h1{
+        font-size: 20pt;
+        padding: 10px;
     }
 }
 

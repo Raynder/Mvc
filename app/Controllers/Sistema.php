@@ -22,68 +22,60 @@
             $this->view('sistema/admin', $dados);
         }
 
-        public function combos() {
-            $colunas = ['nome', 'valor', 'ingredientes', 'status', 'img'];
+        public function grupos() {
+            $colunas = ['nome', 'status'];
 
-            $model = new Combos();
-            $combos = $model->listar();
+            $model = new Grupos();
+            $produtos = $model->listar();
             $dados = array(
-                'lista' => 'combos',
-                'combos' => $combos,
+                'lista' => 'grupos',
+                'produtos' => $produtos,
                 'colunas' => $colunas
             );
+
             $this->view('sistema/admin', $dados);
         }
 
-        public function gourmet() {
-            $colunas = ['nome', 'valor', 'ingredientes', 'status', 'img'];
+        public function produtos($tipo = '') {
+            if(strtolower($tipo) == 'bebidas' || strtolower($tipo) == 'refrigerantes' || strtolower($tipo) == 'sucos') {
+                $colunas = ['nome', 'valor', 'img', 'status'];
+            } else {
+                $colunas = ['nome', 'valor', 'ingredientes', 'bebida', 'batata', 'status', 'img'];
+            }
 
-            $model = new Gourmet();
-            $gourmet = $model->listar();
+            $model = new Produtos();
+            $produtos = $model->listar($tipo);
             $dados = array(
-                'lista' => 'gourmet',
-                'gourmet' => $gourmet,
+                'lista' => $tipo,
+                'produtos' => $produtos,
                 'colunas' => $colunas
             );
+
             $this->view('sistema/admin', $dados);
         }
 
-        public function combinados() {
-            $colunas = ['nome', 'valor','ingredientes', 'status', 'img'];
-
-            $model = new Combinados();
-            $combinados = $model->listar();
-            $dados = array(
-                'lista' => 'combinados',
-                'combinados' => $combinados,
-                'colunas' => $colunas
-            );
-            $this->view('sistema/admin', $dados);
+        public function cadastrar($tipo) {
+            $model = new Produtos();
+            $model->cadastrar($_POST, $tipo);
+            header('Location: ' . URL . 'sistema/produtos/' . $tipo);
         }
 
-        public function bebidas() {
-            $colunas = ['nome', 'valor', 'status', 'img'];
-
-            $model = new Bebidas();
-            $bebidas = $model->listar();
-            $dados = array(
-                'lista' => 'Bebidas',
-                'bebidas' => $bebidas,
-                'colunas' => $colunas
-            );
-            $this->view('sistema/admin', $dados);
-        }
-
-        public function cadastrar($lista) {
-            $model = new $lista();
-            $model->cadastrar($_POST);
-            header('Location: ' . URL . 'sistema/' . $lista);
-        }
-
-        public function excluir($lista, $id, $img) {
-            $model = new $lista();
+        public function excluir($tipo, $id, $img) {
+            $model = new Produtos();
             $model->excluir($id, $img);
-            header('Location: ' . URL . 'sistema/' . $lista);
+            header('Location: ' . URL . 'sistema/produtos/' . $tipo);
+        }
+
+        public function cadastrarGrupo(){
+            $model = new Grupos();
+            $model->cadastrar($_POST);
+            header('Location: ' . URL . 'sistema/grupos');
+        }
+
+        public function excluirGrupo($id){
+            $model = new Grupos();
+            $model->excluir($id);
+            header('Location: ' . URL . 'sistema/grupos');
         }
 
 

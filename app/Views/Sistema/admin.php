@@ -8,16 +8,20 @@
         </div>
         <ul>
             <h3>Produtos</h3>
-            <a href="<?= URL ?>sistema/combos">
-                <li>Combos</li>
-            </a>
-            <a href="<?= URL ?>sistema/combinados">
-                <li>Combinados</li>
-            </a>
-            <a href="<?= URL ?>sistema/gourmet">
-                <li>Gourmet</li>
-            </a>
+            <?php
+                $grupo = new Grupos();
+                $grupos = $grupo->listar();
+
+                foreach ($grupos as $grupo) {
+                    echo('<a href="' . URL . 'sistema/produtos/' . $grupo['nome'] . '">');
+                    echo('<li>' . ucfirst($grupo['nome']) . '</li>');
+                    echo('</a>');
+                }
+            ?>
             <h3>Configurações</h3>
+            <a href="<?= URL ?>sistema/grupos">
+                <li>Grupos</li>
+            </a>
             <a href="<?= URL ?>sistema/ingredientes">
                 <li>Ingredientes</li>
             </a>
@@ -38,7 +42,7 @@
                     <?php } ?>
                     <th>Ações</th>
                 </tr>
-                <?php foreach ($dados[$dados['lista']] as $dado) {
+                <?php foreach ($dados['produtos'] as $dado) {
                 ?>
                     <tr>
                         <?php
@@ -51,11 +55,25 @@
                             } ?>
                             <td><?= $dado[$coluna] ?></td>
                         <?php }
-                        $dado['img'] = str_replace('/', '-', $dado['img']);
+                        if (isset($dado['img']) && $dado['img'] != '') {
+                            $dado['img'] = str_replace('/', '-', $dado['img']);
+                        }
                         ?>
                         <td>
                             <!-- <button value="<?= $dado['id'] ?>" class="btn-editar">Editar</button> -->
-                            <button value="<?= $dado['id'] ?>" onclick="window.location.href='<?= URL ?>sistema/excluir/<?= $dados['lista'] ?>/<?= $dado['id'] ?>/<?= $dado['img'] ?>'" class="btn-excluir">Excluir</button>
+
+                            <?php
+                            if ($dados['lista'] == 'grupos') {
+                            ?>
+                                <button type="button" onclick="window.location.href='<?= URL ?>sistema/excluirGrupo/<?= $dado['id']?>'">Excluir</button>
+                            <?php
+                            } else {
+                            ?>
+                                <button value="<?= $dado['id'] ?>" onclick="window.location.href='<?= URL ?>sistema/excluir/<?= $dados['lista'] ?>/<?= $dado['id'] ?>/<?= $dado['img'] ?>'" class="btn-excluir">Excluir</button>
+                            <?php
+                            }
+                            ?>
+
                         </td>
                     </tr>
                 <?php
@@ -89,7 +107,17 @@
                     <option value="1">Ativo</option>
                     <option value="0">Inativo</option>
                 </select>
-                <button type="button" onclick="document.getElementById('upload_image').click()">Cadastrar Imagem</button>
+                <?php
+                if ($dados['lista'] == 'grupos') {
+                ?>
+                    <button type="button" onclick="cadastrarGrupo()">Cadastrar Grupo</button>
+                <?php
+                } else {
+                ?>
+                    <button type="button" onclick="document.getElementById('upload_image').click()">Cadastrar Imagem</button>
+                <?php
+                }
+                ?>
             </form>
         </div>
     </div>
@@ -300,4 +328,19 @@
         });
 
     });
+
+    function cadastrarGrupo() {
+        formupost = {}
+        document.querySelectorAll(".inp").forEach((item) => {
+            formupost[item.name] = item.value
+        })
+        $.ajax({
+            url: '<?= URL ?>sistema/cadastrarGrupo/<?= $dados['lista'] ?>',
+            method: 'POST',
+            data: formupost,
+            success: function(data) {
+                window.location.reload();
+            }
+        });
+    }
 </script>
