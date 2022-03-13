@@ -91,4 +91,11 @@ class Produtos
         ));
         return $resul;
     }
+
+    public function add($dados)
+    {
+        $_SESSION['carrinho'][] = $dados;
+        
+        return true;
+    }
 }

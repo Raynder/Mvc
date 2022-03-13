@@ -74,7 +74,7 @@
                 </span>
                 <span id="concluir">
                     <p>Concluir</p>
-                    <h1>20,00</h1>
+                    <h1>0,00</h1>
                 </span>
                 <span onclick="mudaPagina(2)">
                     <img src="<?= DIST ?>img/mao.png" alt="" class="mao avancar">
@@ -93,6 +93,27 @@
     </div>
 
     <div class="detalhes-container2">
+
+    </div>
+
+    <div class="carrinho">
+        <?php
+        if (isset($dados['carrinho']) && count($dados['carrinho']) > 0) {
+            $produtos = $dados['carrinho'];
+            $total = 0;
+            $contadorCarrinho = 0;
+            echo ('<div class="produtos">');
+            foreach ($produtos as $produto) {
+                echo ('<div class="itemCarrinho">');
+                echo ('<p>' . $produto['pedido'] . '<span class="remover" onclick="removerCarrinho('.$contadorCarrinho.')">X</span></p>');
+                echo ('</div>');
+                $total += $produto['valor'];
+                $contadorCarrinho++;
+            }
+            echo ('</div>');
+            echo ("<script>setTimeout(function(){abrirCarrinho()},2000);</script>");
+        }
+        ?>
 
     </div>
 
@@ -351,7 +372,8 @@
         /* Estilos dos detalhes */
 
         .detalhes-container,
-        .detalhes-container2 {
+        .detalhes-container2,
+        .carrinho {
             height: 90vh;
             margin: auto;
             width: 80vw;
@@ -413,6 +435,30 @@
             border-radius: 5px;
             box-shadow: 1px 1px black;
         }
+
+        /* Fim estilos dos detalhes */
+
+        /* Estilos do carrinho */
+
+        .carrinho>.produtos {
+    padding: 15px;
+}
+.carrinho>.produtos>.itemCarrinho {
+    padding: 5px;
+    background: red;
+    border-radius: 10px;
+    color: white;
+    margin-bottom: 5px;
+}
+.carrinho>.produtos>.itemCarrinho>p>span.remover {
+    float: right;
+    padding: 0px 7px;
+    background: white;
+    color: red;
+    border-radius: 5px;
+}
+
+        /* Fim estilos do carrinho */
     </style>
 
     <script>
@@ -421,6 +467,7 @@
         var pao = 0;
         var bebida = 0;
         var batata = 0;
+        var respostas = {};
 
         function maoAvancar() {
             try {
@@ -506,7 +553,7 @@
                 success: function(data) {
                     dados = JSON.parse(data.split('[')[1].split(']')[0]);
                     precoAtual = parseFloat(dados.valor.replace(',', '.'));
-                    console.log(precoAtual);
+
                     dadosDescricao = dados.ingredientes.split(';');
 
                     html2 = `<div class="detalhes">
@@ -563,7 +610,7 @@
                             </div>
                         </div>
                         <div>
-                        <button class="btn-detalhes" onclick="addCarrinho('` + dados.nome + `','`+dados.tipo+`')">Adicionar ao carrinho</button>
+                        <button class="btn-detalhes" onclick="addCarrinho('` + dados.nome + `','` + dados.tipo + `')">Adicionar ao carrinho</button>
                         </div>`;
 
                     html2 += `<h2>Preço</h2>
@@ -571,7 +618,7 @@
                             </div>
                         </div>
                         <div>
-                        <button class="btn-detalhes" onclick="addCarrinho('` + dados.nome + `','`+dados.tipo+`')">Adicionar ao carrinho</button>
+                        <button class="btn-detalhes" onclick="addCarrinho('` + dados.nome + `','` + dados.tipo + `')">Adicionar ao carrinho</button>
                         </div>`;
 
 
@@ -604,7 +651,6 @@
         }
 
         function addCarrinho(nome, tipo) {
-            respostas = [];
             respostas['pedido'] = nome;
             respostas['tipo'] = tipo;
 
@@ -639,7 +685,23 @@
                                 respostas[item.id] = 'Não';
                             });
 
-                            console.log(respostas)
+
+                            $.ajax({
+                                url: '<?= URL ?>cardapio/addCarrinho',
+                                type: 'POST',
+                                data: respostas,
+                                success: function(data) {
+                                    dados = JSON.parse(data.split('[')[1].split(']')[0]);
+                                    alerta(dados['msg']);
+                                    setTimeout(() => {
+                                        document.querySelector('.swal2-confirm').addEventListener('click', function() {
+                                            window.location.href = '<?= URL ?>cardapio/produtoAdicionado';
+                                        });
+                                    }, 1000);
+                                }
+                            })
+
+
                         }
                     }
                 }
@@ -701,49 +763,55 @@
             classAtual = elem.getAttribute('class');
             precoAvaliado = precoAtual;
 
-            if(classAtual.includes('pao')){
-                if(elem.innerText == '80g'){
+            if (classAtual.includes('pao')) {
+                if (elem.innerText == '80g') {
                     pao = -2;
                 }
 
-                if(elem.innerText == '120g'){
+                if (elem.innerText == '120g') {
                     pao = 0;
                 }
 
-                if(elem.innerText == '160g'){
+                if (elem.innerText == '160g') {
                     pao = 2;
                 }
             }
-            if(classAtual.includes('bebida')){
-                if(elem.innerText == 'Sim'){
+            if (classAtual.includes('bebida')) {
+                if (elem.innerText == 'Sim') {
                     bebida = 3;
                 }
 
-                if(elem.innerText == 'Não'){
+                if (elem.innerText == 'Não') {
                     bebida = 0;
                 }
             }
-            if(classAtual.includes('batata')){
-                if(elem.innerText == 'Sim'){
+            if (classAtual.includes('batata')) {
+                if (elem.innerText == 'Sim') {
                     batata = 3;
                 }
 
-                if(elem.innerText == 'Não'){
+                if (elem.innerText == 'Não') {
                     batata = 0;
                 }
             }
-            console.log('precoAvaliado: '+precoAvaliado);
 
             precoFinal = precoAvaliado + pao + bebida + batata;
-            console.log(precoFinal);
+            respostas['valor'] = precoFinal;
 
             // atribuir perco final ao precoAvaliado
-            document.querySelector('.detalhes-container2>.detalhes>.detalhes-descricao>.precoAvaliado').innerText = "R$ " + precoFinal.toFixed(2).replace('.',',');
+            document.querySelector('.detalhes-container2>.detalhes>.detalhes-descricao>.precoAvaliado').innerText = "R$ " + precoFinal.toFixed(2).replace('.', ',');
 
             document.querySelectorAll('.' + classAtual).forEach(function(item) {
                 item.classList.remove('ativo');
             })
             elem.classList.add('ativo');
+        }
+
+        function abrirCarrinho() {
+            setTimeout(function() {
+                document.querySelector('.carrinho').style.display = 'block';
+                document.querySelector('.carrinho').style.top = '-170vh';
+            }, 1000);
         }
 
         function pedir(produto) {

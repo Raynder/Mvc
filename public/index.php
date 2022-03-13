@@ -71,6 +71,7 @@
 <script>
     function alerta(frase){
         swal.fire(frase);
+        return true;
     }
 </script>
 
