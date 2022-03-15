@@ -11,7 +11,7 @@
                 'produtos' => $model->listar()
             );
             
-            $this->view('Cardapio/index2', $dados);            
+            $this->view('Cardapio/index', $dados);            
         }
 
         public function buscarProduto() {
@@ -66,7 +66,7 @@
                 'produtos' => $model->listar(),
                 'carrinho' => $produtosCarrinho
             );
-            $this->view('Cardapio/index2', $dados);
+            $this->view('Cardapio/index', $dados);
         }
 
     }

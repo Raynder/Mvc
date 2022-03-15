@@ -5,12 +5,13 @@
         
         public function index() {
             $model = new Pedidos();
-    
-            $array = array(
-                'mesas' => $model->listarMesas()
-            );
 
-            $this->view('recepcao/index', $array);
+            $this->view('recepcao/index');
+        }
+
+        public function listarMesas(){
+            $model = new Pedidos();
+            $dados = $model->listarMesas();
         }
 
         public function imprimir() {

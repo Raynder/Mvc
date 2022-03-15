@@ -1,6 +1,7 @@
 <?php
 $total = 0;
 ?>
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,24 +24,19 @@ $total = 0;
         <div class="close" onclick="closePag()">
             <p>X</p>
         </div>
-        <?php
-        if (isset($dados['mesas']) && count($dados['mesas']) > 0) {
-            $produtos = $dados['mesas'];
-            echo ('<div class="produtos"><h2 style="padding: 5px;">Pedidos</h2>');
-            foreach ($produtos as $produto) {
-                echo ('<div  onclick="expandir('.$produto['mesa'].')" class="itemCarrinho">');
-                echo ('<p>Mesa ' . $produto['mesa'] . '<span class="remover">'.$produto['COUNT(valor)'].' itens</span></p>');
-                echo ('</div>');
-            }
-            echo ('</div>');
-        }
-        ?>
+        <div id="mesas">
+
+        </div>
 
     </div>
 
     <div class="cloud">
         <img src="<?= DIST ?>img/nuvem.png" alt="" class="img_cloud">
     </div>
+
+    <audio src="<?= DIST ?>audio/audio.mp3" id="audio"></audio>
+
+    <iframe id="printf" name="printf"></iframe>
 
     <style>
         h1,
@@ -148,11 +144,11 @@ $total = 0;
 
         /* Estilos do carrinho */
 
-        .lista>.produtos {
+        .lista>#mesas>.produtos {
             padding: 0 15px;
         }
 
-        .lista>.produtos>.itemCarrinho {
+        .lista>#mesas>.produtos>.itemCarrinho {
             padding: 5px;
             background: red;
             border-radius: 10px;
@@ -160,7 +156,7 @@ $total = 0;
             margin-bottom: 5px;
         }
 
-        .lista>.produtos>.itemCarrinho>p>span.remover {
+        .lista>#mesas>.produtos>.itemCarrinho>p>span.remover {
             float: right;
             padding: 0px 7px;
             background: white;
@@ -172,7 +168,30 @@ $total = 0;
     </style>
 
     <script>
-        function expandir(mesa){
+        var totalPedidos;
+        listarMesas();
+
+        setInterval(() => {
+            listarMesas();
+        }, 2000);
+
+        function listarMesas() {
+            $.ajax({
+                url: '<?= URL ?>recepcao/listarMesas',
+                type: 'GET',
+                success: function(data) {
+                    $('#mesas').html(data);
+                    //contar quantos itemCarrinho tem em data
+                    novoTotalPedidos = $('.itemCarrinho').length;
+                    if (novoTotalPedidos > totalPedidos) {
+                        $('#audio')[0].play();
+                    }
+                    totalPedidos = novoTotalPedidos;
+                }
+            });
+        }
+
+        function expandir(mesa) {
             $.ajax({
                 url: '<?= URL ?>recepcao/imprimir',
                 type: 'POST',
@@ -180,9 +199,20 @@ $total = 0;
                     mesa: mesa
                 },
                 success: function(data) {
-                    document.getElementsByTagName('body')[0].innerHTML = data;
+                    $('#printf').contents().find('body').html(data);
+                    window.frames['printf'].focus();
+                    window.frames['printf'].print();
+                    // limpar iframe
+                    setTimeout(function() {
+                        $('#printf').contents().find('body').html('');
+                    }, 2000);
+                    // window.parent.document.getElementById('printf').contentWindow.print();
                 }
             })
+        }
+
+        function play() {
+            document.getElementById('audio').play()
         }
     </script>
 
