@@ -31,6 +31,30 @@
             }
         }
 
+        public function removerCarrinho(){
+            $model = new Produtos();
+
+            $produto = $_POST['pos'];
+            if($nomeProduto = $model->remover($produto)){
+                echo "[".json_encode(array('status' => 'ok', 'msg' => $nomeProduto.' removido do carrinho, continue seu pedido!')). "]";
+            } else {
+                echo "[".json_encode(array('status' => 'error', 'msg' => 'Erro ao remover produto do carrinho')). "]";
+            }
+        }
+
+        public function enviarPedido(){
+            $model = new Produtos();
+
+            if($model->enviar()){
+                echo "[".json_encode(array('status' => 'ok', 'msg' => 'Pedido confirmado! Aguarde, logo será servido.')). "]";
+            } else {
+                echo "[".json_encode(array('status' => 'error', 'msg' => 'Erro ao realizar pedido')). "]";
+            }
+
+            //Limpar carrinho
+            $model->limpar();
+        }
+
         public function produtoAdicionado(){
             $model = new Produtos();
             $grupo = new Grupos();

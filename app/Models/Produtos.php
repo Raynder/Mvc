@@ -30,11 +30,10 @@ class Produtos
 
             $data = base64_decode($image_array_2[1]);
 
-            $image_name = 'dist/img/'.$tipo.'/'.time() . '.png';
-            if(is_dir('dist/img/'.$tipo.'/')){
-            }
-            else{
-                mkdir('dist/img/'.$tipo.'/', 0777, true);
+            $image_name = 'dist/img/' . $tipo . '/' . time() . '.png';
+            if (is_dir('dist/img/' . $tipo . '/')) {
+            } else {
+                mkdir('dist/img/' . $tipo . '/', 0777, true);
             }
             file_put_contents($image_name, $data);
 
@@ -48,7 +47,7 @@ class Produtos
                 ':bebida' => $dados['bebida'],
                 ':batata' => $dados['batata']
             ));
-    
+
             if ($resul) {
                 echo "Cadastrado com sucesso!";
             } else {
@@ -59,10 +58,9 @@ class Produtos
 
     public function listar($tipo = '')
     {
-        if($tipo == ''){
+        if ($tipo == '') {
             $query = "SELECT * FROM produtos";
-        }
-        else{
+        } else {
             $query = "SELECT * FROM produtos WHERE tipo = '$tipo'";
         }
         $resul = $this->sql->select($query);
@@ -95,7 +93,50 @@ class Produtos
     public function add($dados)
     {
         $_SESSION['carrinho'][] = $dados;
-        
+
         return true;
+    }
+
+    public function remover($pos)
+    {
+        $produto = $_SESSION['carrinho'][$pos];
+        // remover e reordenar array
+        unset($_SESSION['carrinho'][$pos]);
+        $_SESSION['carrinho'] = array_values($_SESSION['carrinho']);
+        return $produto['pedido'];
+    }
+
+    public function enviar()
+    {
+        $mesa = 1;
+        $pedido = array();
+        $total = 0;
+        $observacao = '';
+        $queryPedidos = '';
+
+        foreach ($_SESSION['carrinho'] as $produtos) {
+            foreach ($produtos as $key => $value) {
+                if ($key != 'tamanho' && $key != 'bebida' && $key != 'tipo' && $key != 'valor' && $key != 'pedido') {
+                    $observacao .= $key . ': ' . $value . '<br>';
+                }
+            }
+            $total += $produtos['valor'];
+            $queryPedidos .= "('" . $produtos['tipo'] . "', '" . $produtos['pedido'] . "', '" . $produtos['tamanho'] . "', '" . $produtos['valor'] . "', '". $mesa . "', '" . $observacao . "'),";
+
+            $observacao = '';
+        }
+
+        $queryPedidos = substr($queryPedidos, 0, -1);
+        
+        $resul = $this->sql->insere("INSERT INTO pedidos (tipo, pedido, tamanho, valor, mesa,observacao) VALUES $queryPedidos", array());
+        if($resul){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function limpar(){
+        unset($_SESSION['carrinho']);
     }
 }

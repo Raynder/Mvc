@@ -1,3 +1,6 @@
+<?php
+$total = 0;
+?>
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -72,9 +75,9 @@
                 <span onclick="mudaPagina(1)">
                     <img src="<?= DIST ?>img/mao.png" alt="" class="mao voltar">
                 </span>
-                <span id="concluir">
+                <span onclick="abrirCarrinho()" id="concluir">
                     <p>Concluir</p>
-                    <h1>0,00</h1>
+                    <h1 class="valorTotal">R$0,00</h1>
                 </span>
                 <span onclick="mudaPagina(2)">
                     <img src="<?= DIST ?>img/mao.png" alt="" class="mao avancar">
@@ -97,15 +100,18 @@
     </div>
 
     <div class="carrinho">
+        <div class="close" onclick="closePag()">
+            <p>X</p>
+        </div>
         <?php
         if (isset($dados['carrinho']) && count($dados['carrinho']) > 0) {
             $produtos = $dados['carrinho'];
             $total = 0;
             $contadorCarrinho = 0;
-            echo ('<div class="produtos">');
+            echo ('<div class="produtos"><h2 style="padding: 5px;">Carrinho</h2>');
             foreach ($produtos as $produto) {
                 echo ('<div class="itemCarrinho">');
-                echo ('<p>' . $produto['pedido'] . '<span class="remover" onclick="removerCarrinho('.$contadorCarrinho.')">X</span></p>');
+                echo ('<p>' . $produto['pedido'] . '<span class="remover" onclick="removerCarrinho(' . $contadorCarrinho . ')">X</span></p>');
                 echo ('</div>');
                 $total += $produto['valor'];
                 $contadorCarrinho++;
@@ -113,6 +119,14 @@
             echo ('</div>');
             echo ("<script>setTimeout(function(){abrirCarrinho()},2000);</script>");
         }
+        $total = number_format($total, 2, ',', '.');
+        
+        echo("<div style='display: flex;justify-content: space-around;margin-top:10px;'>");
+        echo("<p class='precoAvaliado'>R$$total</p>");
+        echo("<button class='btn-detalhes' onclick='enviarPedido()'>Finalizar</button>");
+        echo("</div>");
+
+        echo("<script>document.querySelectorAll('.valorTotal').forEach(function(e){e.innerHTML = 'R$" . $total . "';});</script>");
         ?>
 
     </div>
@@ -165,6 +179,12 @@
         html {
             overflow: hidden;
             height: 100vh;
+        }
+
+        .close>p {
+            padding: 10px;
+            color: black;
+            background: grey;
         }
 
         /* Estilos do BG */
@@ -423,12 +443,33 @@
             padding-bottom: 5px;
         }
 
+        p.precoAvaliado {
+            background: #ff6f00;
+            width: 40%;
+            padding: 5px;
+            text-align: center;
+            color: white;
+            font-weight: 900;
+            border-radius: 5px;
+            bottom: 0;
+        }
+
+        button.btn-detalhes {
+            padding: 5px;
+            float: left;
+            width: 40%;
+            background: #1bbc1b;
+            border-radius: 5px;
+            color: white;
+            font-weight: 900;
+        }
+
         .detalhes-container>.detalhes>.detalhes-descricao>div>.bebida,
         .detalhes-container>.detalhes>.detalhes-descricao>div>.batata,
         .detalhes-container2>.detalhes>.detalhes-descricao>div>.bebida,
         .detalhes-container2>.detalhes>.detalhes-descricao>div>.batata,
-        .detalhes-container>.detalhes>.detalhes-descricao>div>.pao,
-        .detalhes-container2>.detalhes>.detalhes-descricao>div>.pao {
+        .detalhes-container>.detalhes>.detalhes-descricao>div>.tamanho,
+        .detalhes-container2>.detalhes>.detalhes-descricao>div>.tamanho {
             padding: 5px;
             width: 23%;
             text-align: center;
@@ -441,22 +482,24 @@
         /* Estilos do carrinho */
 
         .carrinho>.produtos {
-    padding: 15px;
-}
-.carrinho>.produtos>.itemCarrinho {
-    padding: 5px;
-    background: red;
-    border-radius: 10px;
-    color: white;
-    margin-bottom: 5px;
-}
-.carrinho>.produtos>.itemCarrinho>p>span.remover {
-    float: right;
-    padding: 0px 7px;
-    background: white;
-    color: red;
-    border-radius: 5px;
-}
+            padding: 0 15px;
+        }
+
+        .carrinho>.produtos>.itemCarrinho {
+            padding: 5px;
+            background: red;
+            border-radius: 10px;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .carrinho>.produtos>.itemCarrinho>p>span.remover {
+            float: right;
+            padding: 0px 7px;
+            background: white;
+            color: red;
+            border-radius: 5px;
+        }
 
         /* Fim estilos do carrinho */
     </style>
@@ -464,10 +507,11 @@
     <script>
         var pag = 1;
         var precoAtual = 0;
-        var pao = 0;
+        var tamanho = 0;
         var bebida = 0;
         var batata = 0;
         var respostas = {};
+        var pagClose = '<div class="close" onclick="closePag()"><p>X</p></div>';
 
         function maoAvancar() {
             try {
@@ -526,6 +570,20 @@
             // }
         }
 
+        function closePag() {
+            document.querySelectorAll('.close>p').forEach((close) => {
+                close.addEventListener('click', function() {
+                    document.querySelector('.detalhes-container').style.top = '100vh';
+                    document.querySelector('.detalhes-container2').style.top = '100vh';
+                    document.querySelector('.carrinho').style.top = '100vh';
+                    document.querySelector('.detalhes-container').style.top = '';
+                    document.querySelector('.detalhes-container2').style.top = '';
+                    document.querySelector('.carrinho').style.top = '';
+                    document.querySelector('.container').style.opacity = 1;
+                }, false);
+            });
+        }
+
         window.onload = function() {
             btnmenu = $('.btnmenu')[0];
             btnmenu.addEventListener('click', opencls);
@@ -580,12 +638,12 @@
                         html += `<p>` + dados.ingredientes + `</p>`
                     }
 
-                    if (dados.ingredientes.indexOf("Pão") != -1 || dados.ingredientes.indexOf("Pao") != -1 || dados.ingredientes.indexOf("pão") != -1 || dados.ingredientes.indexOf("pao") != -1) {
+                    if (dados.ingredientes.indexOf("Pão") != -1 || dados.ingredientes.indexOf("tamanho") != -1 || dados.ingredientes.indexOf("pão") != -1 || dados.ingredientes.indexOf("tamanho") != -1) {
                         html2 += `<h2>Tamanho do pão</h2>`
                         html2 += `<div style="display:flex;justify-content: space-around;">
-                                    <div class="pao" onclick="addAcomp(this)"><p>80g</p></div>
-                                    <div class="pao" onclick="addAcomp(this)"><p>120g</p></div>
-                                    <div class="pao" onclick="addAcomp(this)"><p>160g</p></div>
+                                    <div class="tamanho" onclick="addAcomp(this)"><p>80g</p></div>
+                                    <div class="tamanho" onclick="addAcomp(this)"><p>120g</p></div>
+                                    <div class="tamanho" onclick="addAcomp(this)"><p>160g</p></div>
                                 </div>`
                     }
 
@@ -605,25 +663,23 @@
                                 </div>`
                     }
 
-                    html += `<h2>Preço</h2>
-                                <p class="precoAvaliado">R$ ` + dados.valor + `</p>
-                            </div>
+                    html += `</div>
                         </div>
-                        <div>
-                        <button class="btn-detalhes" onclick="addCarrinho('` + dados.nome + `','` + dados.tipo + `')">Adicionar ao carrinho</button>
+                        <div style="display: flex;justify-content: space-around;">
+                        <p class="precoAvaliado">R$ ` + dados.valor + `</p>
+                        <button class="btn-detalhes" onclick="addCarrinho('` + dados.nome + `','` + dados.tipo + `')">Continuar</button>
                         </div>`;
 
-                    html2 += `<h2>Preço</h2>
-                                <p class="precoAvaliado">R$ ` + dados.valor + `</p>
-                            </div>
+                    html2 += `</div>
                         </div>
-                        <div>
-                        <button class="btn-detalhes" onclick="addCarrinho('` + dados.nome + `','` + dados.tipo + `')">Adicionar ao carrinho</button>
+                        <div style="display: flex;justify-content: space-around;">
+                        <p class="precoAvaliado">R$ ` + dados.valor + `</p>
+                        <button class="btn-detalhes" onclick="addCarrinho('` + dados.nome + `','` + dados.tipo + `')">Continuar</button>
                         </div>`;
 
 
-                    document.querySelector('.detalhes-container').innerHTML = html;
-                    document.querySelector('.detalhes-container2').innerHTML = html2;
+                    document.querySelector('.detalhes-container').innerHTML = pagClose + html;
+                    document.querySelector('.detalhes-container2').innerHTML = pagClose + html2;
                 }
             })
 
@@ -657,7 +713,9 @@
             container2 = document.querySelector('.detalhes-container2');
             // Verificar se o container 2 existe
             if (container2.innerHTML != '') {
+                console.log('passo 1')
                 if (container2.style.top == '') {
+                    console.log('passo 2')
                     // Trazer o container 2 para cima
                     document.querySelector('.detalhes-container').style.top = '-100vh';
                     setTimeout(() => {
@@ -666,6 +724,7 @@
                     return;
                 }
                 if (container2.style.top == '-80vh') {
+                    console.log('passo 3')
                     // Validação de dados do container 2
                     total = container2.querySelectorAll('.detalhes>.detalhes-descricao>div').length
                     total2 = container2.querySelectorAll('.detalhes>.detalhes-descricao>div>.ativo').length
@@ -763,17 +822,17 @@
             classAtual = elem.getAttribute('class');
             precoAvaliado = precoAtual;
 
-            if (classAtual.includes('pao')) {
+            if (classAtual.includes('tamanho')) {
                 if (elem.innerText == '80g') {
-                    pao = -2;
+                    tamanho = -2;
                 }
 
                 if (elem.innerText == '120g') {
-                    pao = 0;
+                    tamanho = 0;
                 }
 
                 if (elem.innerText == '160g') {
-                    pao = 2;
+                    tamanho = 2;
                 }
             }
             if (classAtual.includes('bebida')) {
@@ -795,11 +854,11 @@
                 }
             }
 
-            precoFinal = precoAvaliado + pao + bebida + batata;
+            precoFinal = precoAvaliado + tamanho + bebida + batata;
             respostas['valor'] = precoFinal;
 
             // atribuir perco final ao precoAvaliado
-            document.querySelector('.detalhes-container2>.detalhes>.detalhes-descricao>.precoAvaliado').innerText = "R$ " + precoFinal.toFixed(2).replace('.', ',');
+            document.querySelector('.detalhes-container2>div>.precoAvaliado').innerText = "R$ " + precoFinal.toFixed(2).replace('.', ',');
 
             document.querySelectorAll('.' + classAtual).forEach(function(item) {
                 item.classList.remove('ativo');
@@ -812,52 +871,42 @@
                 document.querySelector('.carrinho').style.display = 'block';
                 document.querySelector('.carrinho').style.top = '-170vh';
             }, 1000);
+            document.querySelector('.container').style.opacity = 0;
         }
 
-        function pedir(produto) {
-            if (produto == 0) {
-                alert("Ingredientes insulficientes!");
-            } else {
-                $.ajax({
-                    url: "php/pedido.php",
-                    type: "POST",
-                    data: {
-                        produto: produto
-                    },
-                    success: function(data) {
-                        alert(data);
-                        location.reload();
-                    }
-                });
-            }
-        }
-
-        function concluir() {
+        function removerCarrinho(pos){
             $.ajax({
-                url: "php/pedido.php",
-                type: "POST",
-                data: {
-                    concluir: 1
-                },
+                url: '<?= URL ?>cardapio/removerCarrinho',
+                type: 'POST',
+                data: {pos: pos},
                 success: function(data) {
-                    alert(data);
-                    location.reload();
-                }
-            });
-        }
-
-        function cancelar() {
-            $.ajax({
-                url: "php/pedido.php",
-                type: "POST",
-                data: {
-                    cancelar: 1
-                },
-                success: function(data) {
-                    alert(data);
-                    location.reload();
+                    dados = JSON.parse(data.split('[')[1].split(']')[0]);
+                    alerta(dados['msg']);
+                    setTimeout(() => {
+                        document.querySelector('.swal2-confirm').addEventListener('click', function() {
+                            window.location.href = '<?= URL ?>cardapio/produtoAdicionado';
+                        });
+                    }, 1000);
                 }
             })
         }
+
+        function enviarPedido(){
+            $.ajax({
+                url: '<?= URL ?>cardapio/enviarPedido',
+                type: 'POST',
+                data: {mesa: '1'},
+                success: function(data) {
+                    dados = JSON.parse(data.split('[')[1].split(']')[0]);
+                    alerta(dados['msg']);
+                    setTimeout(() => {
+                        document.querySelector('.swal2-confirm').addEventListener('click', function() {
+                            window.location.href = '<?= URL ?>cardapio';
+                        });
+                    }, 1000);
+                }
+            })
+        }
+
     </script>
 </body>
