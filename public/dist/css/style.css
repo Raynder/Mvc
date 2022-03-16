@@ -1,3 +1,362 @@
-a{
+a {
     text-decoration: none;
 }
+
+h1,
+*,
+body,
+html,
+p,
+a,
+li,
+ul,
+div,
+img,
+span,
+input,
+button,
+textarea {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    list-style: none;
+    text-decoration: none;
+}
+
+body,
+html {
+    overflow: hidden;
+    height: 100vh;
+}
+
+.close>p {
+    padding: 10px;
+    color: black;
+    background: grey;
+}
+
+
+/* Estilos do BG */
+
+.bg-container {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.container {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    z-index: 1;
+    transition: 1s;
+}
+
+.cloud {
+    background-color: rgba(0, 0, 0, .4);
+    position: fixed;
+    bottom: 0;
+    /* width: 2200px; */
+    height: 100%;
+    animation: rotationLeft 80s linear infinite;
+    z-index: 0;
+}
+
+@keyframes rotationLeft {
+    0% {
+        transform: translateZ(0);
+    }
+    100% {
+        transform: translate3d(-50%, 0, 0);
+    }
+}
+
+.img_cloud {
+    height: 100%;
+    opacity: 0.5
+}
+
+
+/* Fim Estilos do BG */
+
+
+/* Estilos dos produtos */
+
+.container>.produtos {
+    transition: 1s;
+    padding-top: 10px;
+    opacity: 0;
+    display: none;
+    height: 85%;
+}
+
+.grupo {
+    height: 100%;
+}
+
+.grupo>.lista {
+    padding: 0 5px;
+    margin: 5px 0 0 0;
+    width: 50%;
+    height: 32%;
+    float: left;
+    color: #fff;
+}
+
+.grupo>.lista>.produto {
+    width: 100%;
+    height: 100%;
+}
+
+.produto>.item {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, .4)
+}
+
+.produto>.item>h1 {
+    font-family: 'Indie Flower', cursive;
+    -webkit-text-stroke-color: #ff00008a;
+    font-size: 16pt;
+    -webkit-text-stroke-width: 2px;
+}
+
+.produto-imagem>img {
+    width: 60%;
+    left: 50%;
+    transform: translateX(-50%);
+    position: relative;
+}
+
+
+/* Fim dos estilos dos produtos */
+
+
+/* Estilos do menu */
+
+.btnmenu {
+    position: absolute;
+    right: 0;
+    z-index: 3;
+    display: none;
+    transition: 1s;
+    opacity: .6;
+}
+
+.btnmenu>img {
+    width: 70px;
+    margin: 9px;
+    z-index: 6;
+}
+
+.menu {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    background: #53383880;
+    transition: 1s;
+    opacity: 1;
+    display: block;
+    z-index: 2;
+}
+
+.menu>.logo>img {
+    width: 100%;
+}
+
+.menu>.submenu>span.ativo {
+    background: #5c2323 !important;
+}
+
+.submenu {
+    width: 80%;
+    margin: auto;
+}
+
+.menu>.submenu>span {
+    padding: 5px;
+    background: #E72323;
+    text-decoration: none;
+    color: #fff;
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin: 10px 0;
+    border-radius: 10px;
+}
+
+
+/* FIm estilos do menu */
+
+
+/* Estilos rodape */
+
+.produtos>.rodape {
+    position: relative;
+    bottom: 0;
+    width: 90vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 1s;
+    opacity: 1;
+    z-index: 2;
+    height: 11%;
+    margin: 2% 0;
+}
+
+.mao.voltar {
+    opacity: 0;
+    width: 50px;
+    transform: rotate(90deg) scaleY(-1);
+}
+
+.mao.avancar {
+    width: 50px;
+    transform: rotate(90deg);
+}
+
+#concluir {
+    color: white;
+    width: 50%;
+    background-color: #1bbc1b;
+    text-align: center;
+    border-radius: 10px;
+}
+
+#concluir>h1 {
+    font-size: 20pt;
+}
+
+
+/* Fim estilos rodape */
+
+
+/* Estilos dos detalhes */
+
+.detalhes-container,
+.detalhes-container2,
+.carrinho {
+    height: 90vh;
+    margin: auto;
+    width: 80vw;
+    z-index: 5;
+    background-color: #ffffffd6;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    position: relative;
+    top: 100vh;
+    transition: 1s;
+}
+
+.detalhes-container>.detalhes,
+.detalhes-container2>.detalhes {
+    padding: 10px;
+}
+
+.detalhes-container>.detalhes>.detalhes-imagem,
+.detalhes-container2>.detalhes>.detalhes-imagem {
+    width: 50%;
+    margin: auto;
+}
+
+.detalhes-container>.detalhes>.detalhes-imagem>img,
+.detalhes-container2>.detalhes>.detalhes-imagem>img {
+    width: 100%;
+}
+
+.detalhes-container>.detalhes>.detalhes-descricao>div>.ativo,
+.detalhes-container2>.detalhes>.detalhes-descricao>div>.ativo {
+    background-color: #f7d73e;
+}
+
+.detalhes-container>.detalhes>.detalhes-descricao>p>span {
+    width: 8%;
+    padding: 1px;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: 1px 1px black;
+}
+
+.detalhes-container>.detalhes>.detalhes-descricao>p>span.ativo {
+    background: #1bbc1b !important;
+}
+
+.detalhes-container>.detalhes>.detalhes-descricao>p {
+    padding-bottom: 5px;
+}
+
+p.precoAvaliado {
+    background: #ff6f00;
+    width: 40%;
+    padding: 5px;
+    text-align: center;
+    color: white;
+    font-weight: 900;
+    border-radius: 5px;
+    bottom: 0;
+}
+
+button.btn-detalhes {
+    padding: 5px;
+    float: left;
+    width: 40%;
+    background: #1bbc1b;
+    border-radius: 5px;
+    color: white;
+    font-weight: 900;
+}
+
+.detalhes-container>.detalhes>.detalhes-descricao>div>.bebida,
+.detalhes-container>.detalhes>.detalhes-descricao>div>.batata,
+.detalhes-container2>.detalhes>.detalhes-descricao>div>.bebida,
+.detalhes-container2>.detalhes>.detalhes-descricao>div>.batata,
+.detalhes-container>.detalhes>.detalhes-descricao>div>.tamanho,
+.detalhes-container2>.detalhes>.detalhes-descricao>div>.tamanho {
+    padding: 5px;
+    width: 23%;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: 1px 1px black;
+}
+
+
+/* Fim estilos dos detalhes */
+
+
+/* Estilos do carrinho */
+
+.carrinho>.produtos {
+    padding: 0 15px;
+}
+
+.carrinho>.produtos>.itemCarrinho {
+    padding: 5px;
+    background: red;
+    border-radius: 10px;
+    color: white;
+    margin-bottom: 5px;
+}
+
+.carrinho>.produtos>.itemCarrinho>p>span.remover {
+    float: right;
+    padding: 0px 7px;
+    background: white;
+    color: red;
+    border-radius: 5px;
+}
+
+
+/* Fim estilos do carrinho */

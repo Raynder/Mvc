@@ -205,7 +205,7 @@ $total = 0;
                     // limpar iframe
                     setTimeout(function() {
                         $('#printf').contents().find('body').html('');
-                    }, 2000);
+                    }, 8000);
                     // window.parent.document.getElementById('printf').contentWindow.print();
                 }
             })

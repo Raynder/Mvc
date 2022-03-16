@@ -6,9 +6,12 @@
             $model = new Produtos();
             $grupo = new Grupos();
 
+            $produtosCarrinho = isset($_SESSION['carrinho']) ? $_SESSION['carrinho'] : array();
+
             $dados = array(
                 'grupos' => $grupo->listar(),
-                'produtos' => $model->listar()
+                'produtos' => $model->listar(),
+                'carrinho' => $produtosCarrinho
             );
             
             $this->view('Cardapio/index', $dados);            
@@ -53,20 +56,6 @@
 
             //Limpar carrinho
             $model->limpar();
-        }
-
-        public function produtoAdicionado(){
-            $model = new Produtos();
-            $grupo = new Grupos();
-
-            $produtosCarrinho = $_SESSION['carrinho'];
-
-            $dados = array(
-                'grupos' => $grupo->listar(),
-                'produtos' => $model->listar(),
-                'carrinho' => $produtosCarrinho
-            );
-            $this->view('Cardapio/index', $dados);
         }
 
     }

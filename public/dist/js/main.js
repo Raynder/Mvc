@@ -2,10 +2,11 @@ var criterios = 0;
 var split = 0;
 var entao = 0;
 var campoAlvo;
+var url = '192.168.1.71/';
 
-function escreve(code, valor){
+function escreve(code, valor) {
     criterios++;
-    if(entao == 1){
+    if (entao == 1) {
         campoAlvo = code
         entao = 0
     }
@@ -13,40 +14,40 @@ function escreve(code, valor){
     var exemplo = getExemplo();
     var regra = getRegra();
 
-    setExemplo(exemplo +' '+ valor);
+    setExemplo(exemplo + ' ' + valor);
     setRegra(regra + code);
 
-    if(valor == "Então"){
+    if (valor == "Então") {
         entao = 1;
     }
 }
 
-function envia(incremento = ''){
-    if(entao == 1){
+function envia(incremento = '') {
+    if (entao == 1) {
         campoAlvo = code
         entao = 0
     }
-    
+
     var vari = document.getElementById('valor').value;
     var regra = getRegra();
     var exemplo = getExemplo();
 
-    setExemplo(exemplo +' '+ vari);
-    setRegra(regra +"'"+ vari +incremento+"'");
+    setExemplo(exemplo + ' ' + vari);
+    setRegra(regra + "'" + vari + incremento + "'");
 
-    if(split){
+    if (split) {
         setRegra(getRegra() + "') > 0");
         split = 0;
     }
 }
 
-function limpa(){
+function limpa() {
     setExemplo('');
     setRegra('');
     console.log(criterios);
 }
 
-function salvarRegra(){
+function salvarRegra() {
     var regra = getRegra() + ";}";
     $.ajax({
         url: "<?=URL?>formPreco/salvarRegras",
@@ -56,33 +57,34 @@ function salvarRegra(){
             campoAlvo: campoAlvo,
             criterios: criterios
         },
-        success: function(data){
+        success: function(data) {
             console.log(data);
         }
     })
 }
 
-function getRegra(){
+function getRegra() {
     return document.getElementById('regra').value;
 }
 
-function getExemplo(){
+function getExemplo() {
     return document.getElementById('exemplo').value;
 }
 
-function setRegra(regra){
+function setRegra(regra) {
     document.getElementById('regra').value = regra;
 }
 
-function setExemplo(exemplo){
+function setExemplo(exemplo) {
     document.getElementById('exemplo').value = exemplo;
 }
 
-function mudarFornecedor(){
+function mudarFornecedor() {
     var fornecedor = $('#fornecedor').val();
     $('#fornecedortext').text(fornecedor);
 }
-function atualizar(){
+
+function atualizar() {
     preco_do_produto = doc.querySelector('#precodoproduto');
     redutor = doc.querySelector('#redutor');
     repasse = doc.querySelector('#repasse');
@@ -116,21 +118,21 @@ function atualizar(){
     lucro_projetado = doc.querySelector('#lucro-projetado');
     carga_tributaria = doc.querySelector('#carga-tributaria');
 
-    preco_do_produto_v = parseFloat(preco_do_produto.value.replace(".",""))
-    redutor_v = parseFloat(redutor.value.replace("%",""))
-    repasse_v = parseFloat(repasse.value.replace("%",""))
-    desconto_v = parseFloat(desconto.value.replace("%",""))
-    despesas_v = parseFloat(despesas.value.replace(".",""))
-    pis_cofins_importacao_v = parseFloat(pis_cofins_importacao.value.replace("%",""))
-    pis_cofins_credito_v = parseFloat(pis_cofins_credito.value.replace("%",""))
-    ipi_v = parseFloat(ipi.value.replace("%",""))
-    ii_v = parseFloat(ii.value.replace("%",""))
-    frete_v = parseFloat(frete.value.replace("%",""))
-    credito_icms_v = parseFloat(credito_icms.value.replace("%",""))
-    difal_entrada_v = parseFloat(difal_entrada.value.replace("%",""))
-    icms_st_v = parseFloat(icms_st.value.replace("%",""))
-    preco_da_compra_v = parseFloat(preco_da_compra.value.replace(".",""))
-    preco_de_custo_v = parseFloat(preco_de_custo.value.replace(".",""))
+    preco_do_produto_v = parseFloat(preco_do_produto.value.replace(".", ""))
+    redutor_v = parseFloat(redutor.value.replace("%", ""))
+    repasse_v = parseFloat(repasse.value.replace("%", ""))
+    desconto_v = parseFloat(desconto.value.replace("%", ""))
+    despesas_v = parseFloat(despesas.value.replace(".", ""))
+    pis_cofins_importacao_v = parseFloat(pis_cofins_importacao.value.replace("%", ""))
+    pis_cofins_credito_v = parseFloat(pis_cofins_credito.value.replace("%", ""))
+    ipi_v = parseFloat(ipi.value.replace("%", ""))
+    ii_v = parseFloat(ii.value.replace("%", ""))
+    frete_v = parseFloat(frete.value.replace("%", ""))
+    credito_icms_v = parseFloat(credito_icms.value.replace("%", ""))
+    difal_entrada_v = parseFloat(difal_entrada.value.replace("%", ""))
+    icms_st_v = parseFloat(icms_st.value.replace("%", ""))
+    preco_da_compra_v = parseFloat(preco_da_compra.value.replace(".", ""))
+    preco_de_custo_v = parseFloat(preco_de_custo.value.replace(".", ""))
 
     temp = preco_do_produto_v - (preco_do_produto_v * (redutor_v / 100));
     preco_de_custo.value = temp.toFixed(2);
@@ -156,7 +158,7 @@ function atualizar(){
     preco_de_custo.value = temp.toFixed(2);
     temp = temp + (temp * (icms_st_v / 100));
     preco_de_custo.value = temp.toFixed(2);
-    
+
 
 }
 
