@@ -14,6 +14,11 @@
             $dados = $model->listarMesas();
         }
 
+        public function removerMesa(){
+            $model = new Pedidos();
+            $dados = $model->removerMesa($_POST['mesa']);
+        }
+
         public function imprimir() {
             $model = new Pedidos();
     

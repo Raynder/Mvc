@@ -25,6 +25,19 @@
             return true;
         }
 
+        public function removerMesa($mesa) {
+            $sql = new Database();
+            $resultado = $sql->select("DELETE FROM pedidos WHERE mesa = :mesa", array(
+                ':mesa' => $mesa
+            ));
+
+            if ($resultado) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         public function imprimir($mesa){
             $total = 0;
             $sql = new Database();

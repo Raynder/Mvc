@@ -144,7 +144,7 @@ function openDetalhes(id) {
             if (dados.bebida != 0 && dados.bebida != "0") {
                 html2 += `<h2>Bebida</h2>`
                 html2 += `<div style="display:flex;justify-content: space-around;">
-                                    <div class="bebida" onclick="addAcomp(this)"><p>Sim</p></div>
+                                    <div valor="`+dados.bebida+`" class="bebida" onclick="addAcomp(this)"><p>Sim</p></div>
                                     <div class="bebida" onclick="addAcomp(this)"><p>Não</p></div>
                                 </div>`
             }
@@ -152,7 +152,7 @@ function openDetalhes(id) {
             if (dados.batata != 0 && dados.batata != "0") {
                 html2 += `<h2>Batata</h2>`
                 html2 += `<div style="display:flex;justify-content: space-around;">
-                                    <div class="batata" onclick="addAcomp(this)"><p>Sim</p></div>
+                                    <div valor="`+dados.batata+`" class="batata" onclick="addAcomp(this)"><p>Sim</p></div>
                                     <div class="batata" onclick="addAcomp(this)"><p>Não</p></div>
                                 </div>`
             }
@@ -331,7 +331,10 @@ function addAcomp(elem) {
     }
     if (classAtual.includes('bebida')) {
         if (elem.innerText == 'Sim') {
-            bebida = 3;
+            // pegar atributo valor 
+            valorBebida = parseFloat(elem.getAttribute('valor').replace(',', '.'));
+            
+            bebida = valorBebida;
         }
 
         if (elem.innerText == 'Não') {
@@ -340,7 +343,10 @@ function addAcomp(elem) {
     }
     if (classAtual.includes('batata')) {
         if (elem.innerText == 'Sim') {
-            batata = 3;
+            // pegar atributo valor
+            valorBatata = parseFloat(elem.getAttribute('valor').replace(',', '.'));
+
+            batata = valorBatata;
         }
 
         if (elem.innerText == 'Não') {

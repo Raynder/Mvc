@@ -20,13 +20,39 @@ $total = 0;
 
     </div>
 
-    <div class="lista">
-        <div class="close" onclick="closePag()">
+    <div class="menu">
+        <div class="logo">
+            <img src="<?= DIST ?>img/logo.png" alt="">
+        </div>
+
+        <div class="submenu">
+
+            <span name="listapedido">
+                <H1>Lista de Pedidos</H1>
+            </span>
+
+            <span name="relatorios">
+                <H1>Relatórios</H1>
+            </span>
+
+        </div>
+    </div>
+
+    <div style="top: 100vh;" class="listapedido item-container">
+        <div class="close" onclick="closePagRec()">
             <p>X</p>
         </div>
         <div id="mesas">
 
         </div>
+
+    </div>
+
+    <div style="top: 100vh;" class="relatorios item-container">
+        <div class="close" onclick="closePagRec()">
+            <p>X</p>
+        </div>
+
 
     </div>
 
@@ -127,28 +153,29 @@ $total = 0;
 
         /* Estilos dos detalhes */
 
-        .lista {
+
+        .item-container {
             height: 90vh;
-            margin: auto;
             width: 85vw;
             z-index: 5;
             background-color: #ffffffd6;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
-            position: relative;
-            top: 10vh;
+            position: absolute;
+            top: 100vh;
             transition: 1s;
+            left: 7.5vw;
         }
 
         /* Fim estilos dos detalhes */
 
         /* Estilos do carrinho */
 
-        .lista>#mesas>.produtos {
+        .listapedido>#mesas>.produtos {
             padding: 0 15px;
         }
 
-        .lista>#mesas>.produtos>.itemCarrinho {
+        .listapedido>#mesas>.produtos>.itemCarrinho {
             padding: 5px;
             background: red;
             border-radius: 10px;
@@ -156,7 +183,7 @@ $total = 0;
             margin-bottom: 5px;
         }
 
-        .lista>#mesas>.produtos>.itemCarrinho>p>span.remover {
+        .listapedido>#mesas>.produtos>.itemCarrinho>p>span.remover {
             float: right;
             padding: 0px 7px;
             background: white;
@@ -184,9 +211,22 @@ $total = 0;
                     //contar quantos itemCarrinho tem em data
                     novoTotalPedidos = $('.itemCarrinho').length;
                     if (novoTotalPedidos > totalPedidos) {
-                        $('#audio')[0].play();
+                        play()
                     }
                     totalPedidos = novoTotalPedidos;
+                }
+            });
+        }
+
+        function removerMesa(mesa){
+            $.ajax({
+                url: '<?= URL ?>recepcao/removerMesa',
+                type: 'POST',
+                data: {
+                    mesa: mesa
+                },
+                success: function(data) {
+                    listarMesas();
                 }
             });
         }
@@ -206,6 +246,24 @@ $total = 0;
                     setTimeout(function() {
                         $('#printf').contents().find('body').html('');
                     }, 8000);
+
+                    // alerta com swal.fire perguntando se impressão bem sucedida
+                    // se sim, remover mesa
+                    // se não, não fazer nada
+                    swal.fire({
+                        title: 'Impressão',
+                        text: "Impressão bem sucedida?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sim',
+                        cancelButtonText: 'Não'
+                    }).then((result) => {
+                        if (result.value) {
+                            removerMesa(mesa);
+                        }
+                    })
                     // window.parent.document.getElementById('printf').contentWindow.print();
                 }
             })
@@ -213,6 +271,34 @@ $total = 0;
 
         function play() {
             document.getElementById('audio').play()
+        }
+
+        // criar um eventlistener para cada item do submenu
+        $('.submenu>span').each(function() {
+            $(this).click(function() {
+                if ($(this).attr('name') == 'listapedido') {
+                    $('.listapedido').css('top', '10vh');
+                    play();
+                    $('.menu').css('opacity', '0');
+                    setTimeout(function() {
+                        $('.submenu').css('display', 'none');
+                    }, 1000);
+                } else {
+                    $('.' + $(this).attr('name')).css('top', '10vh');
+                    $('.menu').css('opacity', '0');
+                    setTimeout(function() {
+                        $('.submenu').css('display', 'none');
+                    }, 1000);
+                }
+            })
+        })
+
+        function closePagRec() {
+            $('.item-container').css('top', '100vh');
+            $('.submenu').css('display', 'block');
+            setTimeout(function() {
+                $('.menu').css('opacity', '1');
+            }, 500);
         }
     </script>
 

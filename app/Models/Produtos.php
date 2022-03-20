@@ -108,7 +108,7 @@ class Produtos
 
     public function enviar()
     {
-        $mesa = 1;
+        $mesa = $_SESSION['mesa'];
         $pedido = array();
         $total = 0;
         $observacao = '';

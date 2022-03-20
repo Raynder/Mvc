@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 02-Mar-2022 às 04:14
+-- Tempo de geração: 16-Mar-2022 às 21:17
 -- Versão do servidor: 10.4.22-MariaDB
--- versão do PHP: 7.4.27
+-- versão do PHP: 8.1.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -78,6 +78,22 @@ CREATE TABLE `mesas` (
 -- --------------------------------------------------------
 
 --
+-- Estrutura da tabela `pedidos`
+--
+
+CREATE TABLE `pedidos` (
+  `id` int(11) NOT NULL,
+  `pedido` varchar(15) NOT NULL,
+  `tipo` varchar(15) NOT NULL,
+  `tamanho` varchar(7) NOT NULL,
+  `valor` varchar(7) NOT NULL,
+  `mesa` int(2) NOT NULL,
+  `observacao` varchar(256) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura da tabela `produtos`
 --
 
@@ -143,6 +159,12 @@ ALTER TABLE `mesas`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Índices para tabela `pedidos`
+--
+ALTER TABLE `pedidos`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Índices para tabela `produtos`
 --
 ALTER TABLE `produtos`
@@ -174,6 +196,12 @@ ALTER TABLE `ingredientes`
 -- AUTO_INCREMENT de tabela `mesas`
 --
 ALTER TABLE `mesas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `pedidos`
+--
+ALTER TABLE `pedidos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --

@@ -2,7 +2,7 @@
 <div class="header">
 </div>
 <div class="conteudo">
-    <div class="menu">
+    <div class="menu-sys">
         <div class="logo">
             <img src="<?= DIST ?>img/logo.jpg" alt="logo">
         </div>
@@ -158,11 +158,11 @@
         background: #123c5a;
     }
 
-    .menu img {
+    .menu-sys img {
         width: 100%;
     }
 
-    .menu {
+    .menu-sys {
         height: 97vh;
         width: 20%;
         background: #152a38;
