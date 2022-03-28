@@ -13,6 +13,11 @@
 
             $valor = $mes - 1;
              
+            // $db = 'epiz_31390044_sanduicheria'; 
+            // $host = "sql309.epizy.com";
+            // $user = "epiz_31390044";
+            // $pass = "wFfEvFyaUR";
+             
             $db = 'budogs'; 
             $host = "localhost";
             $user = "root";

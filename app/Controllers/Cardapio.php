@@ -31,7 +31,20 @@ class Cardapio extends Controller
     {
         $model = new Produtos();
         $produto = $model->buscar($_POST['id']);
-        echo json_encode($produto);
+
+
+        $res = "[{";
+        
+        foreach($produto[0] as $key => $value) {
+            $value = utf8_encode($value);
+            $res.= '"'.$key.'":"'.$value.'",';
+        }
+        $res = substr($res, 0, -1);
+        $res.= "}]";
+
+        echo ($res);
+        exit();
+
     }
 
     public function addCarrinho()

@@ -102,7 +102,8 @@ function openDetalhes(id) {
             id: id
         },
         success: function(data) {
-            dados = JSON.parse(data.split('[')[1].split(']')[0]);
+            dados = data.split('[')[1].split(']')[0];
+            dados = JSON.parse(dados);
             precoAtual = parseFloat(dados.valor.replace(',', '.'));
 
             dadosDescricao = dados.ingredientes.split(';');
@@ -182,7 +183,7 @@ function openDetalhes(id) {
 
     setTimeout(() => {
         altIngredientes();
-    }, 1000)
+    }, 2500)
 }
 
 function altIngredientes() {
