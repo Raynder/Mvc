@@ -195,10 +195,13 @@ $total = 0;
     </style>
 
     <script>
-        listarMesas();
-
         setInterval(() => {
-            listarMesas();
+            try{
+                listarMesas();
+            }
+            catch(e){
+                console.log(e);
+            }
         }, 2000);
     </script>
 
