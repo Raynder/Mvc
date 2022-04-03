@@ -79,19 +79,22 @@ function closePag() {
 
 window.onload = function() {
     btnmenu = $('.btnmenu')[0];
-    btnmenu.addEventListener('click', opencls);
+    //verificar se btnmenu não e null
+    if (btnmenu != null) {
 
-    lista = document.querySelectorAll('.submenu>span');
-    lista.forEach((itemLista) => {
-        itemLista.addEventListener('click', open);
-    });
+        btnmenu.addEventListener('click', opencls);
 
-    document.querySelectorAll('.produto').forEach((produto) => {
-        produto.addEventListener('click', function() {
-            openDetalhes(produto.id)
-        }, false);
-    });
+        lista = document.querySelectorAll('.submenu>span');
+        lista.forEach((itemLista) => {
+            itemLista.addEventListener('click', open);
+        });
 
+        document.querySelectorAll('.produto').forEach((produto) => {
+            produto.addEventListener('click', function() {
+                openDetalhes(produto.id)
+            }, false);
+        });
+    }
 }
 
 function openDetalhes(id) {
@@ -145,7 +148,7 @@ function openDetalhes(id) {
             if (dados.bebida != 0 && dados.bebida != "0") {
                 html2 += `<h2>Bebida</h2>`
                 html2 += `<div style="display:flex;justify-content: space-around;">
-                                    <div valor="`+dados.bebida+`" class="bebida" onclick="addAcomp(this)"><p>Sim</p></div>
+                                    <div valor="` + dados.bebida + `" class="bebida" onclick="addAcomp(this)"><p>Sim</p></div>
                                     <div class="bebida" onclick="addAcomp(this)"><p>Não</p></div>
                                 </div>`
             }
@@ -153,7 +156,7 @@ function openDetalhes(id) {
             if (dados.batata != 0 && dados.batata != "0") {
                 html2 += `<h2>Batata</h2>`
                 html2 += `<div style="display:flex;justify-content: space-around;">
-                                    <div valor="`+dados.batata+`" class="batata" onclick="addAcomp(this)"><p>Sim</p></div>
+                                    <div valor="` + dados.batata + `" class="batata" onclick="addAcomp(this)"><p>Sim</p></div>
                                     <div class="batata" onclick="addAcomp(this)"><p>Não</p></div>
                                 </div>`
             }
@@ -334,7 +337,7 @@ function addAcomp(elem) {
         if (elem.innerText == 'Sim') {
             // pegar atributo valor 
             valorBebida = parseFloat(elem.getAttribute('valor').replace(',', '.'));
-            
+
             bebida = valorBebida;
         }
 

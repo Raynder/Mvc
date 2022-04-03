@@ -23,6 +23,7 @@
                 echo ('</div>');
             }
             return true;
+            exit();
         }
 
         public function removerMesa($mesa) {

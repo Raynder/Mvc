@@ -12,11 +12,13 @@
         public function listarMesas(){
             $model = new Pedidos();
             $dados = $model->listarMesas();
+            exit();
         }
 
         public function removerMesa(){
             $model = new Pedidos();
             $dados = $model->removerMesa($_POST['mesa']);
+            exit();
         }
 
         public function imprimir() {
@@ -27,6 +29,7 @@
             );
 
             $this->view('recepcao/imprimir', $array);
+            exit();
         }
 
     }

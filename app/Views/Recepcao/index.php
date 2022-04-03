@@ -14,7 +14,7 @@ $total = 0;
 
 </head>
 
-<body>
+<body id="recepcao">
 
     <div class="bg-container">
 
@@ -195,111 +195,11 @@ $total = 0;
     </style>
 
     <script>
-        var totalPedidos;
         listarMesas();
 
         setInterval(() => {
             listarMesas();
         }, 2000);
-
-        function listarMesas() {
-            $.ajax({
-                url: '<?= URL ?>recepcao/listarMesas',
-                type: 'GET',
-                success: function(data) {
-                    $('#mesas').html(data);
-                    //contar quantos itemCarrinho tem em data
-                    novoTotalPedidos = $('.itemCarrinho').length;
-                    if (novoTotalPedidos > totalPedidos) {
-                        play()
-                    }
-                    totalPedidos = novoTotalPedidos;
-                }
-            });
-        }
-
-        function removerMesa(mesa){
-            $.ajax({
-                url: '<?= URL ?>recepcao/removerMesa',
-                type: 'POST',
-                data: {
-                    mesa: mesa
-                },
-                success: function(data) {
-                    listarMesas();
-                }
-            });
-        }
-
-        function expandir(mesa) {
-            $.ajax({
-                url: '<?= URL ?>recepcao/imprimir',
-                type: 'POST',
-                data: {
-                    mesa: mesa
-                },
-                success: function(data) {
-                    $('#printf').contents().find('body').html(data);
-                    window.frames['printf'].focus();
-                    window.frames['printf'].print();
-                    // limpar iframe
-                    setTimeout(function() {
-                        $('#printf').contents().find('body').html('');
-                    }, 8000);
-
-                    // alerta com swal.fire perguntando se impressão bem sucedida
-                    // se sim, remover mesa
-                    // se não, não fazer nada
-                    swal.fire({
-                        title: 'Impressão',
-                        text: "Impressão bem sucedida?",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Sim',
-                        cancelButtonText: 'Não'
-                    }).then((result) => {
-                        if (result.value) {
-                            removerMesa(mesa);
-                        }
-                    })
-                    // window.parent.document.getElementById('printf').contentWindow.print();
-                }
-            })
-        }
-
-        function play() {
-            document.getElementById('audio').play()
-        }
-
-        // criar um eventlistener para cada item do submenu
-        $('.submenu>span').each(function() {
-            $(this).click(function() {
-                if ($(this).attr('name') == 'listapedido') {
-                    $('.listapedido').css('top', '10vh');
-                    play();
-                    $('.menu').css('opacity', '0');
-                    setTimeout(function() {
-                        $('.submenu').css('display', 'none');
-                    }, 1000);
-                } else {
-                    $('.' + $(this).attr('name')).css('top', '10vh');
-                    $('.menu').css('opacity', '0');
-                    setTimeout(function() {
-                        $('.submenu').css('display', 'none');
-                    }, 1000);
-                }
-            })
-        })
-
-        function closePagRec() {
-            $('.item-container').css('top', '100vh');
-            $('.submenu').css('display', 'block');
-            setTimeout(function() {
-                $('.menu').css('opacity', '1');
-            }, 500);
-        }
     </script>
 
 </body>

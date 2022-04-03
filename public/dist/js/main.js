@@ -2,7 +2,7 @@ var criterios = 0;
 var split = 0;
 var entao = 0;
 var campoAlvo;
-var url = '192.168.1.7/';
+var url = 'http://192.168.1.71/mvc/';
 
 function escreve(code, valor) {
     criterios++;
